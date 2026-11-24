@@ -6,7 +6,8 @@ class AuthController {
   signup = async (req: Request, res: Response): Promise<void> => {
     try {
       console.log("SIGNUP REQUEST RECEIVED");
-      console.log(req.body);
+      console.log("CONTROLLER BODY:", req.body);
+console.log("CONTROLLER DATA:", req.body?.data);
       const user = await userService.createUser(req.body);
 
       res.status(201).json({
@@ -24,21 +25,24 @@ class AuthController {
     }
   };
   Login = async (req: Request, res: Response): Promise<void> => {
-    const user = await userService.getUserByEmail(req.body.email);
-    if (!user) {
-      res.status(404).json({
-        status: "404",
-        massge: "the email are not correct",
+    const {data} = req.body
+    const user = await userService.getUserByEmail(data.email);
+    
+    if (user==null) {
+      console.log(user)
+      res.status(401).json({
+        status: 401,
+        message: "the email are not correct",
       });
       return;
     }
     const IsPasswordvelid = await bcrypt.compare(
-      req.body.password,
+      data.password,
       user.password,
     );
     if (!IsPasswordvelid) {
-      res.status(404).json({
-        status: 404,
+      res.status(401).json({
+        status: 401,
         message: "password incorrect",
       });
       return;
