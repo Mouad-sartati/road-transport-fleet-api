@@ -1,24 +1,28 @@
+import { log } from "node:console";
 import { User, IUser } from "../models/user.model.js";
-  import { Role, UserStatus } from "../types/enums.js";
+import { Role, UserStatus } from "../types/enums.js";
 import bcrypt from "bcrypt";
 
- class UserService {
-  async createUser(data: {
-    firstname: string;
-    lastname: string;
-    email: string;
-    password: string;
-    role: Role;
-  }): Promise<object> {
+class UserService {
+  async createUser(data: IUser): Promise<object> {
     console.log("🔥 Creating user...");
+    console.log(data);
+    console.log("🔥 Creating user...");
+
     const existingUser = await User.findOne({
       email: data.email,
     });
 
+    console.log("✅ Existing user check completed");
+
     if (existingUser) {
       throw new Error("User already exists");
     }
+
     const hashedPassword = await bcrypt.hash(data.password, 12);
+
+    console.log("✅ Password hashed");
+
     const user = await User.create({
       firstname: data.firstname,
       lastname: data.lastname,
@@ -27,8 +31,8 @@ import bcrypt from "bcrypt";
       role: data.role,
       status: UserStatus.ACTIVE,
     });
+
     console.log("🔥 User created!");
-    return user;
   }
 
   async getAllUsers(): Promise<IUser[]> {
