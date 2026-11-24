@@ -26,8 +26,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json());
 
+
 app.get("/", (req, res) => {
-  res.status(200).json("he mouad");
+  res.status(200).json({message:"api say hello"});
 });
 app.use("/api/ai/trajet", AIROUTE);
 app.use("/api/v2", v2Route);

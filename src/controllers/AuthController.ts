@@ -5,7 +5,9 @@ import jwt from "jsonwebtoken";
 class AuthController {
   signup = async (req: Request, res: Response): Promise<void> => {
     try {
-      console.log(req.body);
+      console.log("SIGNUP REQUEST RECEIVED");
+      console.log("CONTROLLER BODY:", req.body);
+console.log("CONTROLLER DATA:", req.body?.data);
       const user = await userService.createUser(req.body);
 
       res.status(201).json({
@@ -72,6 +74,25 @@ class AuthController {
           email: user.email,
           role: user.role,
         },
+    const {data} = req.body
+    const user = await userService.getUserByEmail(data.email);
+    
+    if (user==null) {
+      console.log(user)
+      res.status(401).json({
+        status: 401,
+        message: "the email are not correct",
+      });
+      return;
+    }
+    const IsPasswordvelid = await bcrypt.compare(
+      data.password,
+      user.password,
+    );
+    if (!IsPasswordvelid) {
+      res.status(401).json({
+        status: 401,
+        message: "password incorrect",
       });
     } catch (error) {
       if (error instanceof Error) {

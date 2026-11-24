@@ -19,7 +19,26 @@ class UserController {
       });
     }
   };
+async createUser(req: Request, res: Response){
+  try {
+     
 
+      const user = await userService.createUser(req.body);
+
+      res.status(201).json({
+        message: "User created successfully",
+        data: user,
+      });
+    } catch (error) {
+      
+      if (error instanceof Error) {
+        res.status(400).json({
+          message: "Error creating user",
+          error: error.message,
+        });
+      }
+    }
+}
   async getUserById(req: Request<{ id: string }>, res: Response) {
     try {
       const { id } = req.params;

@@ -22,7 +22,7 @@ class ComionController {
 
   async getComionById(req: Request<{ id: string }>, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
 
       const comion = await comionService.getComionById(id);
 
@@ -49,6 +49,7 @@ class ComionController {
 
   async createComion(req: Request, res: Response) {
     try {
+      console.log(req.body)
       const comion = await comionService.createComion(req.body);
 
       return res.status(201).json({
@@ -57,6 +58,7 @@ class ComionController {
         data: comion,
       });
     } catch (error) {
+       console.error("Error creating comion:", error);
        if (error instanceof Error) {
           
       return res.status(500).json({
