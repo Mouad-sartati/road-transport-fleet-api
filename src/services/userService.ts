@@ -24,6 +24,7 @@ class UserService {
     console.log("✅ Password hashed");
 
     const user = await User.create({
+      nickname:data.nickname,
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email,
@@ -31,8 +32,7 @@ class UserService {
       role: data.role,
       status: UserStatus.ACTIVE,
     });
-
-    console.log("🔥 User created!");
+    return user;
   }
 
   async getAllUsers(): Promise<IUser[]> {
