@@ -22,11 +22,11 @@ await database.connect();
 console.log("MongoDB connected!");
 
 app.use(cors({origin:'http://localhost:5173'}))
-
 app.use(express.json());
 
+
 app.get("/", (req, res) => {
-  res.status(200).json("he mouad");
+  res.status(200).json({message:"api say hello"});
 });
 
 app.use("/api/auth", Authrouter);
